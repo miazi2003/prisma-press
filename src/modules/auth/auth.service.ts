@@ -1,4 +1,7 @@
+import { SignOptions } from "jsonwebtoken";
+import config from "../../config";
 import { prisma } from "../../lib/prisma";
+import { jwtUtils } from "../../utils/jwt";
 import { ILoginUser } from "./auth.interface"
 import bcrypt from "bcrypt"
 
@@ -17,8 +20,21 @@ const loginUser = async (payload: ILoginUser) => {
         throw new Error("Password is incorrect")
     }
 
+const jwtPayload = {
+    id : user.id ,
+    name : user.name,
+    email : user.email,
+    role : user.role
+}
+    const accessToken = jwtUtils.createToken(jwtPayload , config.jwt_access_secret , config.jwt_access_expires_in as SignOptions)
+    const refershToken = jwtUtils.createToken(jwtPayload , config.jwt_refersh_secret , config.jwt_refersh_expires_in as SignOptions)
 
-    return user
+
+
+    return {
+        accessToken,
+        refershToken
+    }
 }
 
 export const authService = {

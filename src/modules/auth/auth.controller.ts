@@ -9,15 +9,28 @@ import httpStatus from "http-status";
 
 const loginUser = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-    const loginResult = await authService.loginUser(payload)
+    const {accessToken , refershToken} = await authService.loginUser(payload)
 
+    //cookie set 
+    res.cookie("accessToken" , accessToken , {
+        httpOnly : true , 
+        secure : true , 
+        sameSite : "none" ,
+        maxAge : 1000 * 60 * 60 * 24
+    } )
+
+    res.cookie("refershToken" , refershToken , {
+        httpOnly : true , 
+        secure : true , 
+        sameSite : "none" ,
+        maxAge : 1000 * 60 * 60 * 24 * 7
+    } )
+//response 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
         message: "User logged in successfully",
-        data: {
-            loginResult
-        }
+        data: { accessToken , refershToken }
 
     })
 
