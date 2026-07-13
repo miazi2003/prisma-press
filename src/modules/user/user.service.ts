@@ -6,11 +6,11 @@ import { createUserPayload } from "./user.interface";
 
 
 
-const createUserIntoDB =  async(payload : createUserPayload) =>{
+const createUserIntoDB = async (payload: createUserPayload) => {
 
-    const {name , email , password , profilePhoto} = payload;
+    const { name, email, password, profilePhoto } = payload;
 
-     const isUserExist = await prisma.user.findUnique({
+    const isUserExist = await prisma.user.findUnique({
         where: { email }
     })
 
@@ -28,34 +28,34 @@ const createUserIntoDB =  async(payload : createUserPayload) =>{
             email,
             password: hashedPassword,
 
-            profileId : {
-                create : {
+            profileId: {
+                create: {
                     profilePhoto
                 }
             }
         }
     })
 
-//    await prisma.profile.create({
-//         data : {
-//             userID : createdUser.id,
-//             profilePhoto,
+    //    await prisma.profile.create({
+    //         data : {
+    //             userID : createdUser.id,
+    //             profilePhoto,
 
-//         }
-//     })
+    //         }
+    //     })
 
-const user = await prisma.user.findUnique({
-    where : {
-        id : createdUser.id,
-        email : createdUser.email || email
-    },omit : {
-        password : true
-    },
-    include : {
-        profileId : true
-    }
-})
-return user ;
+    const user = await prisma.user.findUnique({
+        where: {
+            id: createdUser.id,
+            email: createdUser.email || email
+        }, omit: {
+            password: true
+        },
+        include: {
+            profileId: true
+        }
+    })
+    return user;
 
 }
 
