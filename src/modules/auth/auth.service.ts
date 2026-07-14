@@ -27,13 +27,13 @@ const jwtPayload = {
     role : user.role
 }
     const accessToken = jwtUtils.createToken(jwtPayload , config.jwt_access_secret , config.jwt_access_expires_in as SignOptions)
-    const refershToken = jwtUtils.createToken(jwtPayload , config.jwt_refersh_secret , config.jwt_refersh_expires_in as SignOptions)
+    const refreshToken = jwtUtils.createToken(jwtPayload , config.jwt_refersh_secret , config.jwt_refersh_expires_in as SignOptions)
 
 
 
     return {
         accessToken,
-        refershToken
+        refreshToken
     }
 }
 

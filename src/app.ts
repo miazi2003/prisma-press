@@ -1,5 +1,5 @@
 import cookieParser from "cookie-parser";
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors"
 import config from "./config";
 import { prisma } from "./lib/prisma";
@@ -7,6 +7,8 @@ import httpStatus from "http-status";
 import bcrypt from "bcrypt";
 import { userRoutes } from "./modules/user/user.route";
 import { authRouter } from "./modules/auth/auth.route";
+import { jwtUtils } from "./utils/jwt";
+import { Role } from "../generated/prisma/enums";
 const app: Application = express();
 
 app.use(express.json())

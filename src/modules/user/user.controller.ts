@@ -26,16 +26,16 @@ const createUser = createAsync(async (req: Request, res: Response, next: NextFun
 })
 
 const getMyProfile = createAsync(async(req : Request , res : Response , next : NextFunction)=>{
-const {accessToken} = req.cookies;
-console.log(accessToken)
+// const {accessToken} = req.cookies;
+// console.log(accessToken)
 
-const verifiedToken = jwtUtils.verifyToken(accessToken, config.jwt_access_secret)
+// const verifiedToken = jwtUtils.verifyToken(accessToken, config.jwt_access_secret)
 
-if(typeof verifiedToken === "string"){
-    throw new Error(verifiedToken)
-}
+// if(typeof verifiedToken === "string"){
+//     throw new Error(verifiedToken)
+// }
 
-const profile = await userServiceDB.getMyProfileFromDB(verifiedToken.id)
+const profile = await userServiceDB.getMyProfileFromDB(req.user?.id as string)
 
 
 sendResponse(res , {
@@ -50,7 +50,22 @@ sendResponse(res , {
 
 })
 
+const updateMyProfile = createAsync(async(req : Request , res : Response , next : NextFunction)=>{
+    const userId = req.user?.id as string;
+    const payload = req.body;
+const updatedProfile = await userServiceDB.updatemyProfileIntoDB(userId , payload )
+
+sendResponse(res , {
+    success : true ,
+    statusCode : httpStatus.OK,
+    message : "User updated successfully",
+    data : {
+updatedProfile    }
+})
+}
+)
 export const userController = {
     createUser,
-    getMyProfile
+    getMyProfile,
+    updateMyProfile
 }
