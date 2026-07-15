@@ -16,10 +16,20 @@ const getAllPosts = createAsync(async (req: Request, res: Response, next: NextFu
             result
         }
     })
-})
-const getPostStats = () => {
+});
 
-}
+
+const getPostStats = createAsync(async (req: Request, res: Response, next: NextFunction) => {
+   const result = await postService.getStatsFromDB();
+     sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Post Stats Retrived Successfully",
+        data: result
+    })
+});
+
+
 const getMyPost = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const authorId = req.user?.id;
     const result = await postService.getMyPostFromDB(authorId as string)
@@ -29,7 +39,9 @@ const getMyPost = createAsync(async (req: Request, res: Response, next: NextFunc
         message: "All My Post Retrived Successfully",
         data: result
     })
-})
+});
+
+
 const getPostById = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.params.postId;
     const result = await postService.getPostByIdFromDB(postId as string)
@@ -40,7 +52,9 @@ const getPostById = createAsync(async (req: Request, res: Response, next: NextFu
         message: "Post Retrieved succcessfully",
         data: result
     })
-})
+});
+
+
 const createPost = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const id = req.user?.id;
     const payload = req.body;
@@ -53,7 +67,9 @@ const createPost = createAsync(async (req: Request, res: Response, next: NextFun
         data: result
 
     })
-})
+});
+
+
 const updatePost = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.params?.postId;
     const authorId = req.user?.id;
@@ -70,7 +86,9 @@ const updatePost = createAsync(async (req: Request, res: Response, next: NextFun
     })
 
 
-})
+});
+
+
 const deletePost = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.params?.postId;
     const authorId = req.user?.id;
