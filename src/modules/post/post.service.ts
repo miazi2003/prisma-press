@@ -53,8 +53,55 @@ const getPostByIdFromDB = async (postId: string) => {
 
 
 
-  await prisma.post.update({
-    where: {
+  // await prisma.post.update({
+  //   where: {
+  //     id: postId
+  //   },
+  //   data: {
+  //     views: {
+  //       increment: 1
+  //     }
+  //   }
+  // })
+
+
+  // const post = await prisma.post.findUniqueOrThrow({
+  //   where: { id: postId },
+
+  //   include: {
+  //     author: {
+  //       omit: {
+  //         password: true,
+
+  //       }
+  //     },
+
+  //     comments: {
+  //       where : {
+  //         status : CommentStatus.APPROVED
+  //       },
+  //       orderBy : {
+  //         createdAt : "desc"
+  //       },
+      
+  //     },
+  //     _count : {
+  //       select : {
+  //         comments : true
+  //       }
+  //     }
+      
+  //   }
+  // })
+
+
+
+  const transactionResult = await prisma.$transaction(
+    async(tx)=>{
+
+      //update with transaction
+      await tx.post.update({
+          where: {
       id: postId
     },
     data: {
@@ -62,11 +109,12 @@ const getPostByIdFromDB = async (postId: string) => {
         increment: 1
       }
     }
-  })
+      });
 
-
-  const post = await prisma.post.findUniqueOrThrow({
-    where: { id: postId },
+      // throw new Error("fake error")
+      //get post with transaction
+      const post = await tx.post.findUniqueOrThrow({
+         where: { id: postId },
 
     include: {
       author: {
@@ -92,9 +140,14 @@ const getPostByIdFromDB = async (postId: string) => {
       }
       
     }
-  })
+      });
 
-  return post;
+      return post
+    }
+
+  )
+
+  return transactionResult;
 }
 
 
