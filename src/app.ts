@@ -9,6 +9,8 @@ import { userRoutes } from "./modules/user/user.route";
 import { authRouter } from "./modules/auth/auth.route";
 import { jwtUtils } from "./utils/jwt";
 import { Role } from "../generated/prisma/enums";
+import { commentRoute } from "./modules/comment/comment.route";
+import { postRoute } from "./modules/post/post.route";
 const app: Application = express();
 
 app.use(express.json())
@@ -27,6 +29,8 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRouter)
+app.use("/api/posts", postRoute)
+app.use("/api/comments", commentRoute)
 
 
 export default app;

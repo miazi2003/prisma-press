@@ -6,7 +6,6 @@ import { ILoginUser } from "./auth.interface"
 import bcrypt from "bcrypt"
 
 const loginUser = async (payload: ILoginUser) => {
-    console.log(payload)
 
     const { email, password } = payload;
 

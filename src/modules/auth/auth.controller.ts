@@ -40,7 +40,6 @@ const loginUser = createAsync(async (req: Request, res: Response, next: NextFunc
 
 const refreshToken = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.refreshToken
-    console.log(token)
     const {accessToken} = await authService.refreshToken(token)
 
       res.cookie("accessToken", accessToken, {

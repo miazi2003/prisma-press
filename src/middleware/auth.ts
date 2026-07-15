@@ -26,7 +26,6 @@ const auth = (...requiredRoles: Role[]) => {
             req.headers.authorization?.startsWith("Bearer ") ?
                 req.headers.authorization?.split(" ")[1] :
                 req.headers.authorization;
-        console.log(token)
 
         if (!token) {
             throw new Error("You are not logged In")
