@@ -6,6 +6,7 @@ import httpStatus from "http-status";
 
 
 
+
 const createComment = createAsync(async (req: Request, res: Response, next: NextFunction) => {
 
     const authorId = req.user?.id;
@@ -25,6 +26,15 @@ const createComment = createAsync(async (req: Request, res: Response, next: Next
 })
 
 const getCommentByCommentId = createAsync(async (req: Request, res: Response, next: NextFunction) => {
+const commentId = req.body;
+const result = await commentService.getCommentByCommentId(commentId as string);
+
+sendResponse(res , {
+    success : true ,
+    statusCode : httpStatus.OK,
+    message : " Comment Retrived Succesfully",
+    data : result
+})
 
 })
 
@@ -35,7 +45,7 @@ const getCommentsByAuthorId = createAsync(async (req: Request, res: Response, ne
     }
 
     const result = await commentService.getCommentsByAuthorId(authorId as string);
-    
+
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,

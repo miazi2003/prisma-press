@@ -3,39 +3,71 @@ import { ICreateCommentPayload } from "./comment.interface";
 
 
 
-const getCommentByCommentId = () => {
-
-}
-
-const getCommentsByAuthorId = async(authorId : string) => {
-const comments = await prisma.comment.findMany({
-    where : {
-        authorId
+const getCommentByCommentId = async(commentId : string ) => {
+const comment = await prisma.comment.findUniqueOrThrow({
+   where : {
+     id : commentId
+   },
+   include : {
+    author : {
+        select : {
+            id : true,
+            name : true ,
+            email : true 
+        }
     },
-    orderBy : {
-        createdAt : "desc"
+    post : {
+        select : {
+            id : true ,
+             title : true,
+            content : true
+           
+        }
     }
+   }
 })
 
+return comment;
+}
 
-return comments
+const getCommentsByAuthorId = async (authorId: string) => {
+    const comments = await prisma.comment.findMany({
+        where: {
+            authorId
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            post: {
+                select: {
+                    id: true,
+                    title: true
+                }
+            }
+        }
+    }
+    )
+
+
+    return comments
 }
 
 
-const createCommentsIntoDB = async(authorId : string , payload : ICreateCommentPayload) => {
-await prisma.post.findUniqueOrThrow({
-    where : {
-        id : payload.postId
-    }
-});
+const createCommentsIntoDB = async (authorId: string, payload: ICreateCommentPayload) => {
+    await prisma.post.findUniqueOrThrow({
+        where: {
+            id: payload.postId
+        }
+    });
 
-const comment = await prisma.comment.create({
-  data : {
-    ...payload,
-    authorId
-  }
-})
-return comment;
+    const comment = await prisma.comment.create({
+        data: {
+            ...payload,
+            authorId
+        }
+    })
+    return comment;
 }
 
 const updateCommentsIntoDB = () => {
@@ -51,11 +83,11 @@ const handleCommentsFromDB = () => {
 }
 
 
-export const commentService =  {
-getCommentsByAuthorId,
-getCommentByCommentId,
-createCommentsIntoDB,
-updateCommentsIntoDB,
-deleteCommentsFromDB,
-handleCommentsFromDB
+export const commentService = {
+    getCommentsByAuthorId,
+    getCommentByCommentId,
+    createCommentsIntoDB,
+    updateCommentsIntoDB,
+    deleteCommentsFromDB,
+    handleCommentsFromDB
 }
