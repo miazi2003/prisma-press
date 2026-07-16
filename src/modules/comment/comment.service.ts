@@ -7,8 +7,18 @@ const getCommentByCommentId = () => {
 
 }
 
-const getCommentsByAuthorId = () => {
+const getCommentsByAuthorId = async(authorId : string) => {
+const comments = await prisma.comment.findMany({
+    where : {
+        authorId
+    },
+    orderBy : {
+        createdAt : "desc"
+    }
+})
 
+
+return comments
 }
 
 
