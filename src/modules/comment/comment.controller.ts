@@ -26,7 +26,7 @@ const createComment = createAsync(async (req: Request, res: Response, next: Next
 })
 
 const getCommentByCommentId = createAsync(async (req: Request, res: Response, next: NextFunction) => {
-const commentId = req.body;
+const {commentId} = req.params;
 const result = await commentService.getCommentByCommentId(commentId as string);
 
 sendResponse(res , {
@@ -56,7 +56,18 @@ const getCommentsByAuthorId = createAsync(async (req: Request, res: Response, ne
 
 
 const updateComment = createAsync(async (req: Request, res: Response, next: NextFunction) => {
+const authorId = req.user?.id;
+const {commentId} = req.params;
+const data = req.body;
 
+const result =  await commentService.updateCommentsIntoDB(authorId as string , commentId as string , data)
+
+sendResponse(res , {
+    success : true ,
+    statusCode : httpStatus.OK,
+    message : "Comment has been updated0" ,
+    data : result
+})
 })
 const deleteComment = createAsync(async (req: Request, res: Response, next: NextFunction) => {
 
