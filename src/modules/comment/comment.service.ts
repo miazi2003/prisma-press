@@ -1,15 +1,31 @@
-import { create } from "node:domain"
+import { prisma } from "../../lib/prisma"
+import { ICreateCommentPayload } from "./comment.interface";
 
-const getCommentsByIdFromDB = () => {
+
+
+const getCommentByCommentId = () => {
 
 }
 
-const getCommentsFromDB = () => {
+const getCommentsByAuthorId = () => {
 
 }
 
-const createCommentsIntoDB = () => {
 
+const createCommentsIntoDB = async(authorId : string , payload : ICreateCommentPayload) => {
+await prisma.post.findUniqueOrThrow({
+    where : {
+        id : payload.postId
+    }
+});
+
+const comment = await prisma.comment.create({
+  data : {
+    ...payload,
+    authorId
+  }
+})
+return comment;
 }
 
 const updateCommentsIntoDB = () => {
@@ -26,8 +42,8 @@ const handleCommentsFromDB = () => {
 
 
 export const commentService =  {
-getCommentsByIdFromDB,
-getCommentsFromDB,
+getCommentsByAuthorId,
+getCommentByCommentId,
 createCommentsIntoDB,
 updateCommentsIntoDB,
 deleteCommentsFromDB,
