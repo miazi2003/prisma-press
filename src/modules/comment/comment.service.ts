@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma"
-import { ICreateCommentPayload, IUpdateCommentPayload } from "./comment.interface";
+import { ICreateCommentPayload, IModeratePayload, IUpdateCommentPayload } from "./comment.interface";
 
 
 
@@ -90,13 +90,39 @@ const comment = await prisma.comment.update({
 return comment
 }
 
-const deleteCommentsFromDB = () => {
+const deleteCommentsFromDB = async(commnetId : string , authorId : string ) => {
+
+ await prisma.comment.findFirstOrThrow({
+    where : {
+        id : commnetId,
+        authorId
+    }
+})
+
+const result  = await prisma.comment.delete({
+    where : {
+        id : commnetId
+    }
+})
+
+
+return result
 
 }
 
-const handleCommentsFromDB = () => {
-
-}
+const handleCommentsFromDB = async (
+  commentId: string,
+  data: IModeratePayload
+) => {
+  return await prisma.comment.update({
+    where: {
+      id: commentId,
+    },
+    data : {
+        status : data.status
+    },
+  });
+};
 
 
 export const commentService = {

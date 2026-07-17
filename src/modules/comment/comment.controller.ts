@@ -70,10 +70,28 @@ sendResponse(res , {
 })
 })
 const deleteComment = createAsync(async (req: Request, res: Response, next: NextFunction) => {
+ const {commentId} = req.params;
+ const authorId = req.user?.id
+ const result = await commentService.deleteCommentsFromDB(commentId as string,authorId as string)
 
+ sendResponse(res , {
+    success : true ,
+    statusCode : httpStatus.OK,
+    message : "Comment Deleted Successfully",
+    data :  null
+ })
 })
 const handleCommentByAdmin = createAsync(async (req: Request, res: Response, next: NextFunction) => {
+const {commentId} = req.params;
+const data = req.body;
+const result = await commentService.handleCommentsFromDB(commentId as string , data)
 
+ sendResponse(res , {
+    success : true ,
+    statusCode : httpStatus.OK,
+    message : "Comment Updated Successfully",
+    data :  result
+ })
 })
 
 export const commentController = {
