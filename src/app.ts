@@ -11,6 +11,8 @@ import { jwtUtils } from "./utils/jwt";
 import { Role } from "../generated/prisma/enums";
 import { commentRoute } from "./modules/comment/comment.route";
 import { postRoute } from "./modules/post/post.route";
+import notFound from "./middleware/notFound";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
 const app: Application = express();
 
 app.use(express.json())
@@ -31,6 +33,11 @@ app.use("/api/users", userRoutes)
 app.use("/api/auth", authRouter)
 app.use("/api/posts", postRoute)
 app.use("/api/comments", commentRoute)
+
+
+app.use(notFound)
+
+app.use(globalErrorHandler)
 
 
 export default app;
