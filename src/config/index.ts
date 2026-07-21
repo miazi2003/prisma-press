@@ -12,5 +12,7 @@ jwt_access_secret : process.env.JWT_ACCESS_SECRET!,
 jwt_refersh_secret : process.env.JWT_REFRESH_SECRET!,
 jwt_access_expires_in : process.env.JWT_ACCESS_EXPIRES_IN!,
 jwt_refersh_expires_in : process.env.JWT_REFRESH_EXPIRES_IN!,
-
+stripe_secret_key : process.env.STRIPE_SECRET_KEY!,
+stripe_price_id : process.env.STRIPE_PRICE_ID!,
+stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET!
 }
