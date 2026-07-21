@@ -36,23 +36,24 @@ const handleWebhook = createAsync(
     }
 )
 
-// const getSubscriptionStatus = catchAsync(
-//     async (req : Request, res : Response, next : NextFunction) => {
-//         const userId = req.user?.id
+const getSubscriptionStatus = createAsync(
+    async (req : Request, res : Response, next : NextFunction) => {
+        const userId = req.user?.id
 
-//         const result = await subscriptionServices.getSubscriptionStatus(userId as string);
+        const result = await subscriptionServices.getSubscriptionStatus(userId as string);
 
-//         sendResponse(res, {
-//             success : true,
-//             statusCode : httpStatus.OK,
-//             message : "Subscription status retrived successfully",
-//             data : result
-//         })
-//     }
-// )
+        sendResponse(res, {
+            success : true,
+            statusCode : httpStatus.OK,
+            message : "Subscription status retrived successfully",
+            data : result
+        })
+    }
+)
 
 
 export const subscriptionController = {
     createCheckoutSession,
     handleWebhook,
+    getSubscriptionStatus
 }
