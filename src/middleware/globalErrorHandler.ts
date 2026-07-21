@@ -41,9 +41,11 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
 
 
 
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+    const finalStatusCode = statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+
+    res.status(finalStatusCode).json({
         success: false,
-        statusCode: statusCode || httpStatus.INTERNAL_SERVER_ERROR,
+        statusCode: finalStatusCode,
         name : errorName,
         message: errorMessage,
         error: err.stack

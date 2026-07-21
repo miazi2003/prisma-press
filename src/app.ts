@@ -14,7 +14,15 @@ import { postRoute } from "./modules/post/post.route";
 import notFound from "./middleware/notFound";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { subscriptionRoute } from "./modules/subscription/subscription.route";
+import { subscriptionController } from "./modules/subscription/subscription.controller";
+import { premiumRoute } from "./modules/premium/premium.route";
 const app: Application = express();
+
+app.post(
+    "/api/subscription/webhook",
+    express.raw({ type: "application/json" }),
+    subscriptionController.handleWebhook
+);
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -35,6 +43,8 @@ app.use("/api/auth", authRouter)
 app.use("/api/posts", postRoute)
 app.use("/api/comments", commentRoute)
 app.use("/api/subscription", subscriptionRoute)
+app.use("/api/premium", premiumRoute)
+
 
 
 app.use(notFound)

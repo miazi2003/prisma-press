@@ -45,11 +45,12 @@ const getMyPost = createAsync(async (req: Request, res: Response, next: NextFunc
 
 const getPostById = createAsync(async (req: Request, res: Response, next: NextFunction) => {
     const postId = req.params.postId;
-    const result = await postService.getPostByIdFromDB(postId as string)
+    const user = req.user;
+    const result = await postService.getPostByIdFromDB(postId as string, user)
 
     sendResponse(res, {
         success: true,
-        statusCode: httpStatus.FOUND,
+        statusCode: httpStatus.OK,
         message: "Post Retrieved succcessfully",
         data: result
     })

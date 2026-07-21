@@ -21,20 +21,26 @@ declare global {
 
 const auth = (...requiredRoles: Role[]) => {
     return createAsync(async (req: Request, res: Response, next: NextFunction) => {
-        const token = req.cookies.accessToken ?
+        const token = req.cookies?.accessToken ?
             req.cookies.accessToken :
             req.headers.authorization?.startsWith("Bearer ") ?
                 req.headers.authorization?.split(" ")[1] :
                 req.headers.authorization;
 
         if (!token) {
-            throw new Error("You are not logged In")
+            if (requiredRoles.length === 0) {
+                return next();
+            }
+            throw new Error("You are not logged In");
         }
 
 
         const verifiedToken = jwtUtils.verifyToken(token, config.jwt_access_secret)
 
         if (!verifiedToken.success) {
+            if (requiredRoles.length === 0) {
+                return next();
+            }
             throw new Error(verifiedToken.error)
         }
 
@@ -48,10 +54,7 @@ const auth = (...requiredRoles: Role[]) => {
 
         const user = await prisma.user.findUnique({
             where: {
-                id,
-                name,
-                email,
-                role
+                id
             }
         })
 
@@ -67,10 +70,10 @@ const auth = (...requiredRoles: Role[]) => {
 
 
         req.user = {
-            name,
-            id,
-            email,
-            role
+            name: user.name,
+            id: user.id,
+            email: user.email,
+            role: user.role
         }
 
         next()
